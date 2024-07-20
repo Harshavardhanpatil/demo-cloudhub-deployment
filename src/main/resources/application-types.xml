@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="success" format="json">
+      <types:shape format="weave" example="examples/success.json"><![CDATA[%dw 2.0
+
+type success = {|
+  Status: Number {"typeId": "int"}, 
+  Message: String
+|} {"example": "{\\\"Status\\\":200,\\\"Message\\\":\\\"success\\\"}"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#c12c845a-52fc-450a-adf4-3d96e6a5b350"/>
+</types:mule>

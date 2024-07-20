@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="dd7640e0-8e77-4c1c-a280-3e90e0e1aace" basePath="db" >
+		<http:listener-connection host="0.0.0.0" port="8088" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="18e7bb33-a3ff-4d7b-bbf0-6827d118b6eb" >
+		<db:mssql-connection host="NLPULTP8105111" port="1433" user="traininguser" password="User123" databaseName="training" />
+	</db:config>
+	<flow name="demo-maven-cloudhub-deploymentFlow" doc:id="078b237a-5d56-4fae-b9f4-56ff3c474f67" >
+		<http:listener doc:name="Listener" doc:id="3dc1ac96-432a-4bb3-bafb-ee3627d04c72" config-ref="HTTP_Listener_config" path="/fetch" allowedMethods="GET"/>
+		<db:select doc:name="Select" doc:id="d889d4c3-e274-4a53-a9fd-f574b9e65e7e" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from flights]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="c12c845a-52fc-450a-adf4-3d96e6a5b350" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
